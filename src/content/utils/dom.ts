@@ -22,6 +22,9 @@ export function detectLanguage(pre: HTMLElement): string | null {
 
       const ghMatch = cls.match(/^highlight-source-(.+)$/);
       if (ghMatch) return ghMatch[1].toLowerCase();
+
+      const ghTextMatch = cls.match(/^highlight-text-(.+?)(?:-\w+)?$/);
+      if (ghTextMatch) return ghTextMatch[1].toLowerCase();
     }
   }
 

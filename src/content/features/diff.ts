@@ -1,4 +1,4 @@
-import { detectLanguage, extractCleanCode } from '../utils/dom';
+import { detectLanguage, extractCleanCode, getCodeBlockContainer } from '../utils/dom';
 import { t } from '@shared/i18n';
 import type { Settings, DiffViewMode } from '@shared/types';
 
@@ -10,6 +10,7 @@ interface DiffState {
 }
 
 const diffMap = new Map<string, DiffState>();
+const processedPairs = new WeakSet<HTMLElement>();
 let defaultViewMode: DiffViewMode = 'side-by-side';
 
 export function initDiff(settings: Settings) {
@@ -33,41 +34,73 @@ export function initDiff(settings: Settings) {
   };
 }
 
+function getAllCodePres(): HTMLElement[] {
+  const seen = new Set<HTMLElement>();
+  const result: HTMLElement[] = [];
+
+  document.querySelectorAll<HTMLElement>('pre').forEach((pre) => {
+    if (seen.has(pre)) return;
+    const hasCode = pre.querySelector('code');
+    const inHighlight = pre.closest('.highlight');
+    const hasSpans = pre.querySelector('span[class^="pl-"]');
+    if (hasCode || inHighlight || hasSpans) {
+      seen.add(pre);
+      result.push(pre);
+    }
+  });
+
+  return result;
+}
+
 function scanForDiffPairs(): void {
-  const allPres = Array.from(document.querySelectorAll<HTMLElement>('pre > code'))
-    .map((code) => code.parentElement as HTMLElement)
-    .filter(Boolean);
+  const allPres = getAllCodePres();
 
   for (let i = 0; i < allPres.length - 1; i++) {
     const preA = allPres[i];
     const preB = allPres[i + 1];
-    const pairKey = `${i}-${i + 1}`;
 
-    if (diffMap.has(pairKey)) continue;
+    if (processedPairs.has(preA)) continue;
 
     const langA = detectLanguage(preA);
     const langB = detectLanguage(preB);
     if (!langA || !langB || langA !== langB) continue;
 
+    const pairKey = `diff-${i}-${i + 1}`;
+    if (diffMap.has(pairKey)) continue;
+
+    processedPairs.add(preA);
     injectDiffButton(preA, preB, pairKey);
   }
 }
 
 function injectDiffButton(preA: HTMLElement, preB: HTMLElement, pairKey: string): void {
+  const containerA = getCodeBlockContainer(preA);
+
   const btn = document.createElement('button');
   btn.textContent = `⇄ ${t('content.diff')}`;
 
   Object.assign(btn.style, {
     display: 'block',
-    margin: '4px auto',
-    padding: '4px 16px',
+    margin: '8px auto',
+    padding: '5px 20px',
     fontSize: '12px',
     fontFamily: 'system-ui, sans-serif',
-    border: '1px solid rgba(128,128,128,0.3)',
-    borderRadius: '12px',
-    background: 'rgba(128,128,128,0.05)',
-    color: 'inherit',
+    border: '1px solid rgba(130,80,223,0.4)',
+    borderRadius: '16px',
+    background: 'rgba(130,80,223,0.08)',
+    color: '#8250df',
     cursor: 'pointer',
+    fontWeight: '500',
+    transition: 'all 0.15s',
+  });
+
+  btn.addEventListener('mouseenter', () => {
+    btn.style.background = 'rgba(130,80,223,0.15)';
+    btn.style.borderColor = 'rgba(130,80,223,0.6)';
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.background = 'rgba(130,80,223,0.08)';
+    btn.style.borderColor = 'rgba(130,80,223,0.4)';
   });
 
   const panel = document.createElement('div');
@@ -76,9 +109,10 @@ function injectDiffButton(preA: HTMLElement, preB: HTMLElement, pairKey: string)
     margin: '8px 0',
     border: '1px solid rgba(128,128,128,0.2)',
     borderRadius: '6px',
-    overflow: 'hidden',
+    overflow: 'auto',
     fontSize: '13px',
-    fontFamily: 'monospace',
+    fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
+    background: '#f6f8fa',
   });
 
   const state: DiffState = { btn, panel, preA, preB };
@@ -91,11 +125,12 @@ function injectDiffButton(preA: HTMLElement, preB: HTMLElement, pairKey: string)
       btn.textContent = `✕ ${t('content.closeDiff')}`;
     } else {
       panel.style.display = 'none';
+      panel.innerHTML = '';
       btn.textContent = `⇄ ${t('content.diff')}`;
     }
   });
 
-  preA.insertAdjacentElement('afterend', btn);
+  containerA.insertAdjacentElement('afterend', btn);
   btn.insertAdjacentElement('afterend', panel);
 }
 

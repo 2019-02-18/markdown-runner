@@ -10,6 +10,7 @@ interface ExecMessage {
 }
 
 window.addEventListener('message', (event: MessageEvent<ExecMessage>) => {
+  if (event.source !== window.parent) return;
   const data = event.data;
   if (data?.type !== 'EXECUTE_CODE') return;
 

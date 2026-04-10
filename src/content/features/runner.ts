@@ -1,4 +1,5 @@
 import { detectLanguage, extractCleanCode, generateBlockId, getCodeBlockContainer } from '../utils/dom';
+import { generateHtmlFromCss } from '../utils/css-preview';
 import { t } from '@shared/i18n';
 import { RUNNABLE_LANGUAGES } from '@shared/constants';
 import type { Settings, ExecutionResult, OutputEntry } from '@shared/types';
@@ -54,19 +55,19 @@ function injectRunButton(pre: HTMLElement): void {
     padding: '3px 8px',
     fontSize: '11px',
     fontFamily: 'system-ui, sans-serif',
-    border: '1px solid rgba(76,175,80,0.4)',
+    border: '1px solid rgba(76,175,80,0.5)',
     borderRadius: '4px',
-    background: 'rgba(76,175,80,0.1)',
+    background: 'rgba(76,175,80,0.15)',
     color: '#2ea44f',
     cursor: 'pointer',
-    opacity: '0',
+    opacity: '0.7',
     transition: 'opacity 0.15s',
     zIndex: '20',
     lineHeight: '1.4',
   });
 
   container.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
-  container.addEventListener('mouseleave', () => { btn.style.opacity = '0'; });
+  container.addEventListener('mouseleave', () => { btn.style.opacity = '0.7'; });
 
   const outputPanel = document.createElement('div');
   Object.assign(outputPanel.style, {
@@ -173,22 +174,26 @@ function executeHtmlCss(code: string, lang: string, state: RunnerState): void {
   const iframe = document.createElement('iframe');
   Object.assign(iframe.style, {
     width: '100%',
-    minHeight: '100px',
-    border: 'none',
-    borderRadius: '4px',
+    minHeight: '120px',
+    border: '1px solid rgba(128,128,128,0.15)',
+    borderRadius: '6px',
     background: '#fff',
   });
   iframe.sandbox.add('allow-scripts');
 
-  const content = lang === 'css'
-    ? `<style>${code}</style><div class="preview">CSS Preview</div>`
-    : code;
+  let body: string;
+  if (lang === 'css') {
+    const autoHtml = generateHtmlFromCss(code);
+    body = `<style>${code}</style>\n${autoHtml}`;
+  } else {
+    body = code;
+  }
 
-  iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>${content}</body></html>`;
+  iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font-family:system-ui,-apple-system,sans-serif;margin:12px;color:#333}</style></head><body>${body}</body></html>`;
 
   iframe.addEventListener('load', () => {
     const height = iframe.contentDocument?.body?.scrollHeight;
-    if (height) iframe.style.height = `${Math.min(height + 20, 500)}px`;
+    if (height) iframe.style.height = `${Math.min(height + 24, 500)}px`;
   });
 
   state.outputPanel.appendChild(iframe);

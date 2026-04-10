@@ -17,7 +17,7 @@
       "progressBar": "阅读进度"
     },
     "settings": "设置",
-    "rate": "评分"
+    "feedback": "反馈"
   },
   "content": {
     "copy": "复制",
@@ -72,7 +72,8 @@
       "version": "版本",
       "github": "GitHub",
       "feedback": "反馈",
-      "changelog": "更新日志"
+      "changelog": "更新日志",
+      "description": "增强任意网页上的 Markdown 代码块，提供复制、运行、对比、行号、折叠、浮动目录和阅读进度条功能。"
     }
   }
 }

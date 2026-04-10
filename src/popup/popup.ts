@@ -1,5 +1,6 @@
 import { sendToBackground } from '@shared/messaging';
 import { initI18n, t } from '@shared/i18n';
+import { applyTheme, watchSystemTheme } from '@shared/theme';
 import type { StatusResponse, FeatureName } from '@shared/types';
 
 async function init(): Promise<void> {
@@ -8,6 +9,9 @@ async function init(): Promise<void> {
 
   const status = await sendToBackground<StatusResponse>({ type: 'GET_STATUS' });
   if (!status) return;
+
+  applyTheme(status.settings.theme);
+  watchSystemTheme(status.settings.theme);
 
   const globalToggle = document.getElementById('globalToggle') as HTMLInputElement;
   const statusDot = document.getElementById('statusDot')!;
@@ -48,9 +52,9 @@ async function init(): Promise<void> {
     chrome.runtime.openOptionsPage();
   });
 
-  document.getElementById('btnRate')?.addEventListener('click', () => {
+  document.getElementById('btnFeedback')?.addEventListener('click', () => {
     chrome.tabs.create({
-      url: `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`,
+      url: 'https://github.com/2019-02-18/markdown-runner/issues',
     });
   });
 

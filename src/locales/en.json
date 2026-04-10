@@ -17,7 +17,7 @@
       "progressBar": "Reading Progress"
     },
     "settings": "Settings",
-    "rate": "Rate"
+    "feedback": "Feedback"
   },
   "content": {
     "copy": "Copy",
@@ -72,7 +72,8 @@
       "version": "Version",
       "github": "GitHub",
       "feedback": "Feedback",
-      "changelog": "Changelog"
+      "changelog": "Changelog",
+      "description": "Enhance Markdown code blocks on any webpage with copy, run, diff, line numbers, folding, floating TOC and reading progress bar."
     }
   }
 }

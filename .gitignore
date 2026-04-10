@@ -5,3 +5,12 @@ dist/
 Thumbs.db
 feedback-history*.json
 REQUIREMENTS.md
+
+# Store listing assets
+STORE_LISTING.md
+STORE_DESCRIPTION.txt
+PRIVACY_POLICY.md
+promo-*.png
+screenshot-*.png
+markdown-runner-*.zip
+scripts/

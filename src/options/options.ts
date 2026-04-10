@@ -1,5 +1,6 @@
 import { getSettings, saveSettings } from '@shared/storage';
 import { initI18n, t, setLocale } from '@shared/i18n';
+import { applyTheme, watchSystemTheme } from '@shared/theme';
 import type { Settings, LocaleKey, ThemeMode, DiffViewMode, SiteListMode } from '@shared/types';
 
 let currentSettings: Settings;
@@ -8,6 +9,8 @@ async function init(): Promise<void> {
   currentSettings = await getSettings();
   await initI18n();
   applyTranslations();
+  applyTheme(currentSettings.theme);
+  watchSystemTheme(currentSettings.theme);
   bindTabs();
   populateSettings();
   bindSettingsEvents();
@@ -49,7 +52,10 @@ function bindSettingsEvents(): void {
     save({ language: v as LocaleKey });
   });
 
-  bindSelect('optTheme', (v) => save({ theme: v as ThemeMode }));
+  bindSelect('optTheme', (v) => {
+    applyTheme(v as ThemeMode);
+    save({ theme: v as ThemeMode });
+  });
   bindNumber('optFoldThreshold', (v) => save({ foldThreshold: v }));
   bindNumber('optExecutionTimeout', (v) => save({ executionTimeout: v }));
   bindSelect('optDiffViewMode', (v) => save({ diffViewMode: v as DiffViewMode }));

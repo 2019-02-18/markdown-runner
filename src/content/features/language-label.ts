@@ -23,13 +23,12 @@ export function initLanguageLabel() {
 }
 
 function siteHasLanguageLabel(pre: HTMLElement): boolean {
-  const container = pre.closest('.highlight');
+  const container = pre.closest('.highlight, .code-block, .codeblock');
   if (container) {
-    const existing = container.querySelector('[data-lang-label], .code-header, .highlight-source');
+    const existing = container.querySelector(
+      '[data-lang-label], .code-header, .code-lang, .code-block-lang',
+    );
     if (existing) return true;
-    for (const cls of container.classList) {
-      if (cls.startsWith('highlight-source-')) return true;
-    }
   }
   return false;
 }

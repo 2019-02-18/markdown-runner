@@ -164,7 +164,8 @@ function collapseBlock(state: CollapseState): void {
     state.pre.style.overflow = 'hidden';
   }
   state.overlay.style.display = '';
-  const hiddenLines = state.totalLines - 10;
+  const visibleLines = Math.min(10, Math.floor(state.totalLines / 4));
+  const hiddenLines = state.totalLines - visibleLines;
   state.btn.textContent = `▾ ${t('content.showMore', { count: hiddenLines })}`;
   state.collapsed = true;
   state.container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
