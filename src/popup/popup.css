@@ -1,0 +1,222 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: #24292f;
+  background: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #c9d1d9;
+    background: #161b22;
+  }
+  .popup-header { border-color: #30363d; }
+  .popup-divider { background: #30363d; }
+  .feature-item:hover { background: rgba(255,255,255,0.04); }
+  .footer-btn { color: #8b949e; }
+  .footer-btn:hover { background: rgba(255,255,255,0.06); color: #c9d1d9; }
+  .toggle-slider { background: #484f58; }
+  .status-dot.active { background: #3fb950; }
+  .status-dot.inactive { background: #8b949e; }
+  .popup-version { color: #8b949e; }
+  .block-count { color: #8b949e; }
+}
+
+.popup {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.popup-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.popup-logo {
+  width: 22px;
+  height: 22px;
+}
+
+.popup-name {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.popup-version {
+  font-size: 11px;
+  color: #6a737d;
+  font-weight: 400;
+}
+
+/* Status */
+.popup-status {
+  padding: 10px 16px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.active {
+  background: #2ea44f;
+}
+
+.status-dot.inactive {
+  background: #6a737d;
+}
+
+.block-count {
+  font-size: 12px;
+  color: #6a737d;
+  margin-left: 14px;
+}
+
+/* Divider */
+.popup-divider {
+  height: 1px;
+  background: #e1e4e8;
+  margin: 0 16px;
+}
+
+/* Feature List */
+.feature-list {
+  list-style: none;
+  padding: 4px 0;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  padding: 7px 16px;
+  gap: 10px;
+  cursor: default;
+  transition: background 0.1s;
+}
+
+.feature-item:hover {
+  background: rgba(0,0,0,0.03);
+}
+
+.feature-icon {
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.feature-name {
+  flex: 1;
+  font-size: 13px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggle-switch.small {
+  width: 32px;
+  height: 18px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #c1c7cd;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-switch.small .toggle-slider::before {
+  height: 12px;
+  width: 12px;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: #4A90D9;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(16px);
+}
+
+.toggle-switch.small input:checked + .toggle-slider::before {
+  transform: translateX(14px);
+}
+
+/* Footer */
+.popup-footer {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+}
+
+.footer-btn {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid rgba(128,128,128,0.2);
+  border-radius: 6px;
+  background: transparent;
+  color: #6a737d;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.footer-btn:hover {
+  background: rgba(0,0,0,0.04);
+  color: #24292f;
+}

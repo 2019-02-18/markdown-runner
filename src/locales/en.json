@@ -1,0 +1,78 @@
+{
+  "popup": {
+    "title": "Markdown Runner",
+    "currentPage": "Current Page",
+    "activated": "Activated",
+    "deactivated": "Deactivated",
+    "blocksDetected": "{{count}} code blocks detected",
+    "noBlocks": "No code blocks detected",
+    "features": {
+      "runner": "Code Runner",
+      "copy": "One-Click Copy",
+      "collapse": "Code Folding",
+      "languageLabel": "Language Label",
+      "lineNumbers": "Line Numbers",
+      "diff": "Diff Mode",
+      "toc": "Floating TOC",
+      "progressBar": "Reading Progress"
+    },
+    "settings": "Settings",
+    "rate": "Rate"
+  },
+  "content": {
+    "copy": "Copy",
+    "copied": "Copied!",
+    "run": "Run",
+    "running": "Running...",
+    "stop": "Stop",
+    "showMore": "Show more ({{count}} lines)",
+    "showLess": "Show less",
+    "diff": "Diff",
+    "diffSideBySide": "Side by Side",
+    "diffInline": "Inline",
+    "closeDiff": "Close Diff",
+    "tocTitle": "Table of Contents",
+    "executionTimeout": "Execution timed out ({{seconds}}s)",
+    "executionError": "Error"
+  },
+  "options": {
+    "nav": {
+      "general": "General",
+      "codeBlock": "Code Block",
+      "siteManagement": "Site Management",
+      "about": "About"
+    },
+    "general": {
+      "title": "General Settings",
+      "globalToggle": "Enable Markdown Runner",
+      "language": "Language",
+      "theme": "Theme",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeSystem": "Follow System"
+    },
+    "codeBlock": {
+      "title": "Code Block Settings",
+      "foldThreshold": "Folding threshold (lines)",
+      "executionTimeout": "Execution timeout (seconds)",
+      "diffViewMode": "Default Diff view",
+      "diffSideBySide": "Side by Side",
+      "diffInline": "Inline"
+    },
+    "siteManagement": {
+      "title": "Site Management",
+      "mode": "Mode",
+      "whitelist": "Whitelist",
+      "blacklist": "Blacklist",
+      "addSite": "Add site...",
+      "removeSite": "Remove"
+    },
+    "about": {
+      "title": "About",
+      "version": "Version",
+      "github": "GitHub",
+      "feedback": "Feedback",
+      "changelog": "Changelog"
+    }
+  }
+}

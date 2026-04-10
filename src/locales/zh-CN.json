@@ -1,0 +1,78 @@
+{
+  "popup": {
+    "title": "Markdown Runner",
+    "currentPage": "当前页面",
+    "activated": "已激活",
+    "deactivated": "已停用",
+    "blocksDetected": "检测到 {{count}} 个代码块",
+    "noBlocks": "未检测到代码块",
+    "features": {
+      "runner": "代码执行",
+      "copy": "一键复制",
+      "collapse": "代码折叠",
+      "languageLabel": "语言标签",
+      "lineNumbers": "行号显示",
+      "diff": "Diff 模式",
+      "toc": "浮动目录",
+      "progressBar": "阅读进度"
+    },
+    "settings": "设置",
+    "rate": "评分"
+  },
+  "content": {
+    "copy": "复制",
+    "copied": "已复制！",
+    "run": "运行",
+    "running": "运行中...",
+    "stop": "停止",
+    "showMore": "展开更多（{{count}} 行）",
+    "showLess": "收起",
+    "diff": "对比",
+    "diffSideBySide": "左右对比",
+    "diffInline": "内联对比",
+    "closeDiff": "关闭对比",
+    "tocTitle": "目录",
+    "executionTimeout": "执行超时（{{seconds}}秒）",
+    "executionError": "错误"
+  },
+  "options": {
+    "nav": {
+      "general": "通用",
+      "codeBlock": "代码块",
+      "siteManagement": "网站管理",
+      "about": "关于"
+    },
+    "general": {
+      "title": "通用设置",
+      "globalToggle": "启用 Markdown Runner",
+      "language": "语言",
+      "theme": "主题",
+      "themeLight": "浅色",
+      "themeDark": "深色",
+      "themeSystem": "跟随系统"
+    },
+    "codeBlock": {
+      "title": "代码块设置",
+      "foldThreshold": "折叠阈值（行数）",
+      "executionTimeout": "执行超时（秒）",
+      "diffViewMode": "默认 Diff 视图",
+      "diffSideBySide": "左右对比",
+      "diffInline": "内联对比"
+    },
+    "siteManagement": {
+      "title": "网站管理",
+      "mode": "模式",
+      "whitelist": "白名单",
+      "blacklist": "黑名单",
+      "addSite": "添加网站...",
+      "removeSite": "移除"
+    },
+    "about": {
+      "title": "关于",
+      "version": "版本",
+      "github": "GitHub",
+      "feedback": "反馈",
+      "changelog": "更新日志"
+    }
+  }
+}

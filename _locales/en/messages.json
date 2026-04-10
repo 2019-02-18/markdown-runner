@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "Markdown Runner",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "Enhance Markdown code blocks on any webpage — copy, run, diff, line numbers, folding, TOC and more.",
+    "description": "Extension description"
+  }
+}

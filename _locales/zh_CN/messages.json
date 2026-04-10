@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "Markdown Runner",
+    "description": "扩展名称"
+  },
+  "extensionDescription": {
+    "message": "增强任意网页上的 Markdown 代码块 — 一键复制、运行、Diff 对比、行号、折叠、浮动目录等。",
+    "description": "扩展描述"
+  }
+}

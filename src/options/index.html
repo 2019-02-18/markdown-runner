@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="options.css">
+  <title>Markdown Runner - Settings</title>
+</head>
+<body>
+  <div class="options-container">
+    <aside class="options-nav">
+      <div class="nav-header">
+        <img src="/icons/icon48.png" alt="" class="nav-logo">
+        <h1 class="nav-title">Markdown Runner</h1>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active" data-tab="general">
+          <span>⚙</span> <span data-i18n="options.nav.general">General</span>
+        </li>
+        <li class="nav-item" data-tab="codeBlock">
+          <span>{ }</span> <span data-i18n="options.nav.codeBlock">Code Block</span>
+        </li>
+        <li class="nav-item" data-tab="siteManagement">
+          <span>🌐</span> <span data-i18n="options.nav.siteManagement">Site Management</span>
+        </li>
+        <li class="nav-item" data-tab="about">
+          <span>ℹ</span> <span data-i18n="options.nav.about">About</span>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="options-content">
+      <!-- General Tab -->
+      <section class="tab-panel active" id="tab-general">
+        <h2 data-i18n="options.general.title">General Settings</h2>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <label data-i18n="options.general.globalToggle">Enable Markdown Runner</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="optGlobalEnabled" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <label data-i18n="options.general.language">Language</label>
+            <select id="optLanguage" class="select-input">
+              <option value="en">English</option>
+              <option value="zh-CN">中文</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <label data-i18n="options.general.theme">Theme</label>
+            <select id="optTheme" class="select-input">
+              <option value="system" data-i18n="options.general.themeSystem">Follow System</option>
+              <option value="light" data-i18n="options.general.themeLight">Light</option>
+              <option value="dark" data-i18n="options.general.themeDark">Dark</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Code Block Tab -->
+      <section class="tab-panel" id="tab-codeBlock">
+        <h2 data-i18n="options.codeBlock.title">Code Block Settings</h2>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <label data-i18n="options.codeBlock.foldThreshold">Folding threshold (lines)</label>
+            <input type="number" id="optFoldThreshold" class="number-input" value="20" min="5" max="200">
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <label data-i18n="options.codeBlock.executionTimeout">Execution timeout (seconds)</label>
+            <input type="number" id="optExecutionTimeout" class="number-input" value="5" min="1" max="60">
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <label data-i18n="options.codeBlock.diffViewMode">Default Diff view</label>
+            <select id="optDiffViewMode" class="select-input">
+              <option value="side-by-side" data-i18n="options.codeBlock.diffSideBySide">Side by Side</option>
+              <option value="inline" data-i18n="options.codeBlock.diffInline">Inline</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Site Management Tab -->
+      <section class="tab-panel" id="tab-siteManagement">
+        <h2 data-i18n="options.siteManagement.title">Site Management</h2>
+
+        <div class="setting-group">
+          <div class="setting-row">
+            <label data-i18n="options.siteManagement.mode">Mode</label>
+            <select id="optSiteListMode" class="select-input">
+              <option value="blacklist" data-i18n="options.siteManagement.blacklist">Blacklist</option>
+              <option value="whitelist" data-i18n="options.siteManagement.whitelist">Whitelist</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="site-list-header">
+            <input type="text" id="newSiteInput" class="text-input" data-i18n-placeholder="options.siteManagement.addSite" placeholder="Add site...">
+            <button id="btnAddSite" class="btn-primary">+</button>
+          </div>
+          <ul class="site-list" id="siteList"></ul>
+        </div>
+      </section>
+
+      <!-- About Tab -->
+      <section class="tab-panel" id="tab-about">
+        <h2 data-i18n="options.about.title">About</h2>
+
+        <div class="about-info">
+          <div class="about-row">
+            <span data-i18n="options.about.version">Version</span>
+            <span id="aboutVersion">1.0.0</span>
+          </div>
+          <div class="about-row">
+            <span data-i18n="options.about.feedback">Feedback</span>
+            <a href="#" id="feedbackLink">GitHub Issues</a>
+          </div>
+        </div>
+
+        <div class="about-description">
+          <p>Enhance Markdown code blocks on any webpage with copy, run, diff, line numbers, folding, floating TOC and reading progress bar.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="options.ts"></script>
+</body>
+</html>

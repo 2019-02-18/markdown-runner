@@ -1,0 +1,17 @@
+/* Markdown Runner - Content Script Styles */
+
+:root {
+  --mr-bg: #f6f8fa;
+  --mr-text: #24292f;
+  --mr-border: rgba(128, 128, 128, 0.2);
+  --mr-accent: #4A90D9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mr-bg: #161b22;
+    --mr-text: #c9d1d9;
+    --mr-border: rgba(128, 128, 128, 0.3);
+    --mr-accent: #58a6ff;
+  }
+}
