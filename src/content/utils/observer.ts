@@ -1,17 +1,27 @@
 /**
- * Observe the DOM for dynamically added <pre><code> blocks (SPA support).
- * Calls the handler for each new code block found.
+ * Observe the DOM for code blocks (SPA support).
+ * Detects multiple patterns:
+ *   - <pre><code>...</code></pre> (standard Markdown renderers)
+ *   - <pre>...</pre> inside .highlight (GitHub)
+ *   - <pre class="...">...</pre> standalone code blocks
  */
 export function observeCodeBlocks(
   handler: (codeBlock: HTMLElement) => void,
 ): MutationObserver {
   const processed = new WeakSet<HTMLElement>();
 
+  function isCodePre(pre: HTMLElement): boolean {
+    if (pre.querySelector('code')) return true;
+    if (pre.closest('.highlight')) return true;
+    if (pre.querySelector('span[class^="pl-"]')) return true;
+    const text = pre.textContent ?? '';
+    return text.includes('\n') && text.trim().length > 10;
+  }
+
   function scanAndProcess(root: ParentNode): void {
-    const blocks = root.querySelectorAll<HTMLElement>('pre > code');
-    for (const block of blocks) {
-      const pre = block.parentElement as HTMLPreElement;
-      if (pre && !processed.has(pre)) {
+    const pres = root.querySelectorAll<HTMLElement>('pre');
+    for (const pre of pres) {
+      if (!processed.has(pre) && isCodePre(pre)) {
         processed.add(pre);
         handler(pre);
       }
@@ -24,7 +34,7 @@ export function observeCodeBlocks(
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
         if (node instanceof HTMLElement) {
-          if (node.matches('pre') && node.querySelector('code')) {
+          if (node.tagName === 'PRE' && isCodePre(node)) {
             if (!processed.has(node)) {
               processed.add(node);
               handler(node);

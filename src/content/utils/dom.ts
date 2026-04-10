@@ -1,27 +1,41 @@
 /**
  * Extract the language identifier from a code block's class name.
- * Looks for patterns like "language-javascript", "lang-js", "highlight-python", etc.
+ * Handles multiple patterns:
+ *   - class="language-javascript" (standard)
+ *   - class="lang-js" (some renderers)
+ *   - parent div class="highlight highlight-source-javascript" (GitHub)
+ *   - data-language attribute
  */
 export function detectLanguage(pre: HTMLElement): string | null {
   const code = pre.querySelector('code');
-  if (!code) return null;
 
-  const classNames = [...(code.classList ?? []), ...(pre.classList ?? [])];
+  const elements: HTMLElement[] = [pre];
+  if (code) elements.unshift(code);
 
-  for (const cls of classNames) {
-    const match = cls.match(/^(?:language|lang|highlight)-(.+)$/);
-    if (match) return match[1].toLowerCase();
+  const parent = pre.parentElement;
+  if (parent) elements.push(parent);
+
+  for (const el of elements) {
+    for (const cls of el.classList) {
+      const langMatch = cls.match(/^(?:language|lang)-(.+)$/);
+      if (langMatch) return langMatch[1].toLowerCase();
+
+      const ghMatch = cls.match(/^highlight-source-(.+)$/);
+      if (ghMatch) return ghMatch[1].toLowerCase();
+    }
   }
 
-  const dataLang = code.getAttribute('data-language') ?? pre.getAttribute('data-language');
-  if (dataLang) return dataLang.toLowerCase();
+  for (const el of elements) {
+    const dataLang = el.getAttribute('data-language') ?? el.getAttribute('data-lang');
+    if (dataLang) return dataLang.toLowerCase();
+  }
 
   return null;
 }
 
 /**
  * Extract clean code text from a <pre> element,
- * stripping line numbers and language badge text that some sites inject.
+ * stripping line numbers, language badges, and injected UI elements.
  */
 export function extractCleanCode(pre: HTMLElement): string {
   const code = pre.querySelector('code');
@@ -30,7 +44,8 @@ export function extractCleanCode(pre: HTMLElement): string {
   const clone = target.cloneNode(true) as HTMLElement;
 
   clone.querySelectorAll(
-    '.line-number, .linenumber, .hljs-ln-numbers, .rouge-gutter, [data-line-number]',
+    '.line-number, .linenumber, .hljs-ln-numbers, .rouge-gutter, [data-line-number], ' +
+    '.mr-copy-btn, .mr-lang-label, .mr-line-numbers, button',
   ).forEach((el) => el.remove());
 
   return clone.textContent?.replace(/^\n+|\n+$/g, '') ?? '';
