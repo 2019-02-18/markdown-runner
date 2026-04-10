@@ -21,15 +21,25 @@ export function initLineNumbers() {
   };
 }
 
+function hasExistingLineNumbers(pre: HTMLElement): boolean {
+  return !!(
+    pre.querySelector('.linenumber, .line-number, .hljs-ln-numbers, [data-line-number]') ||
+    pre.querySelector('td.blob-num') ||
+    pre.closest('.highlight')?.querySelector('.blob-num')
+  );
+}
+
 function injectLineNumbers(pre: HTMLElement): void {
   if (lineNumMap.has(pre)) return;
+  if (hasExistingLineNumbers(pre)) return;
 
   const code = extractCleanCode(pre);
   const lineCount = code.split('\n').length;
   if (lineCount < 2) return;
 
+  const existingPadding = parseFloat(getComputedStyle(pre).paddingLeft) || 16;
   pre.style.position = 'relative';
-  pre.style.paddingLeft = '3.5em';
+  pre.style.paddingLeft = `${existingPadding + 32}px`;
 
   const gutter = document.createElement('div');
   gutter.className = LINE_NUM_CLASS;
@@ -38,16 +48,15 @@ function injectLineNumbers(pre: HTMLElement): void {
     position: 'absolute',
     top: '0',
     left: '0',
-    width: '3em',
+    width: `${existingPadding + 28}px`,
     height: '100%',
     paddingTop: getComputedStyle(pre).paddingTop,
     paddingBottom: getComputedStyle(pre).paddingBottom,
     textAlign: 'right',
-    fontFamily: 'monospace',
+    fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
     fontSize: getComputedStyle(pre).fontSize,
     lineHeight: getComputedStyle(pre).lineHeight,
-    color: 'rgba(128,128,128,0.5)',
-    borderRight: '1px solid rgba(128,128,128,0.2)',
+    color: 'rgba(128,128,128,0.4)',
     userSelect: 'none',
     pointerEvents: 'none',
     overflow: 'hidden',

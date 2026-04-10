@@ -44,4 +44,10 @@ export default defineManifest({
   sandbox: {
     pages: ['src/sandbox/sandbox.html'],
   },
+  web_accessible_resources: [
+    {
+      matches: ['<all_urls>'],
+      resources: ['src/sandbox/sandbox.html'],
+    },
+  ],
 });

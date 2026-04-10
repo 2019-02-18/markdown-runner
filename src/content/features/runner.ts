@@ -1,4 +1,4 @@
-import { detectLanguage, extractCleanCode, generateBlockId } from '../utils/dom';
+import { detectLanguage, extractCleanCode, generateBlockId, getCodeBlockContainer } from '../utils/dom';
 import { t } from '@shared/i18n';
 import { RUNNABLE_LANGUAGES } from '@shared/constants';
 import type { Settings, ExecutionResult, OutputEntry } from '@shared/types';
@@ -41,54 +41,69 @@ function injectRunButton(pre: HTMLElement): void {
   const lang = detectLanguage(pre);
   if (!lang || !RUNNABLE_LANGUAGES.has(lang)) return;
 
-  pre.style.position = 'relative';
+  const container = getCodeBlockContainer(pre);
+  container.style.position = 'relative';
 
   const btn = document.createElement('button');
   btn.textContent = `▶ ${t('content.run')}`;
 
   Object.assign(btn.style, {
     position: 'absolute',
-    top: '8px',
-    right: '70px',
-    padding: '4px 10px',
-    fontSize: '12px',
+    top: '6px',
+    right: '60px',
+    padding: '3px 8px',
+    fontSize: '11px',
     fontFamily: 'system-ui, sans-serif',
     border: '1px solid rgba(76,175,80,0.4)',
     borderRadius: '4px',
     background: 'rgba(76,175,80,0.1)',
-    color: '#4CAF50',
+    color: '#2ea44f',
     cursor: 'pointer',
     opacity: '0',
-    transition: 'opacity 0.2s',
-    zIndex: '10',
+    transition: 'opacity 0.15s',
+    zIndex: '20',
+    lineHeight: '1.4',
   });
 
-  pre.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
-  pre.addEventListener('mouseleave', () => { btn.style.opacity = '0'; });
+  container.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
+  container.addEventListener('mouseleave', () => { btn.style.opacity = '0'; });
 
   const outputPanel = document.createElement('div');
   Object.assign(outputPanel.style, {
     display: 'none',
-    margin: '0',
+    margin: '4px 0 8px',
     padding: '10px 14px',
     fontSize: '13px',
-    fontFamily: 'monospace',
-    background: 'rgba(0,0,0,0.03)',
-    borderTop: '1px solid rgba(128,128,128,0.2)',
-    borderRadius: '0 0 6px 6px',
+    fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
+    background: '#1e1e1e',
+    color: '#d4d4d4',
+    border: '1px solid rgba(128,128,128,0.2)',
+    borderRadius: '6px',
     maxHeight: '300px',
     overflow: 'auto',
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
   });
 
+  const outputLabel = document.createElement('div');
+  outputLabel.textContent = '▸ Output';
+  Object.assign(outputLabel.style, {
+    fontSize: '11px',
+    fontWeight: '600',
+    color: '#888',
+    marginBottom: '6px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+  });
+  outputPanel.prepend(outputLabel);
+
   const state: RunnerState = { btn, outputPanel, iframe: null };
   runnerMap.set(pre, state);
 
   btn.addEventListener('click', () => executeCode(pre, state));
 
-  pre.appendChild(btn);
-  pre.insertAdjacentElement('afterend', outputPanel);
+  container.appendChild(btn);
+  container.insertAdjacentElement('afterend', outputPanel);
 }
 
 function executeCode(pre: HTMLElement, state: RunnerState): void {
@@ -99,7 +114,10 @@ function executeCode(pre: HTMLElement, state: RunnerState): void {
   state.btn.textContent = `⏳ ${t('content.running')}`;
   state.btn.style.opacity = '1';
   state.outputPanel.style.display = 'block';
+
+  const outputLabel = state.outputPanel.querySelector('div');
   state.outputPanel.innerHTML = '';
+  if (outputLabel) state.outputPanel.appendChild(outputLabel);
 
   if (lang === 'html' || lang === 'css') {
     executeHtmlCss(code, lang, state);
@@ -152,12 +170,10 @@ function executeCode(pre: HTMLElement, state: RunnerState): void {
 }
 
 function executeHtmlCss(code: string, lang: string, state: RunnerState): void {
-  state.outputPanel.innerHTML = '';
-
   const iframe = document.createElement('iframe');
   Object.assign(iframe.style, {
     width: '100%',
-    minHeight: '120px',
+    minHeight: '100px',
     border: 'none',
     borderRadius: '4px',
     background: '#fff',
@@ -176,7 +192,6 @@ function executeHtmlCss(code: string, lang: string, state: RunnerState): void {
   });
 
   state.outputPanel.appendChild(iframe);
-  state.outputPanel.style.display = 'block';
   state.btn.textContent = `▶ ${t('content.run')}`;
 }
 
@@ -185,13 +200,13 @@ function appendOutput(panel: HTMLElement, entry: OutputEntry): void {
   line.textContent = entry.args.join(' ');
 
   const colorMap: Record<string, string> = {
-    error: '#e53935',
-    warn: '#f57f17',
-    info: '#1565c0',
-    log: 'inherit',
-    result: '#388e3c',
+    error: '#f48771',
+    warn: '#cca700',
+    info: '#6cb6ff',
+    log: '#d4d4d4',
+    result: '#73c991',
   };
-  line.style.color = colorMap[entry.type] ?? 'inherit';
+  line.style.color = colorMap[entry.type] ?? '#d4d4d4';
   if (entry.type === 'error') line.style.fontWeight = 'bold';
 
   panel.appendChild(line);

@@ -1,4 +1,4 @@
-import { detectLanguage } from '../utils/dom';
+import { detectLanguage, getCodeBlockContainer } from '../utils/dom';
 import { LANGUAGE_ALIASES } from '@shared/constants';
 
 const LABEL_CLASS = 'mr-lang-label';
@@ -22,15 +22,29 @@ export function initLanguageLabel() {
   };
 }
 
+function siteHasLanguageLabel(pre: HTMLElement): boolean {
+  const container = pre.closest('.highlight');
+  if (container) {
+    const existing = container.querySelector('[data-lang-label], .code-header, .highlight-source');
+    if (existing) return true;
+    for (const cls of container.classList) {
+      if (cls.startsWith('highlight-source-')) return true;
+    }
+  }
+  return false;
+}
+
 function injectLabel(pre: HTMLElement): void {
   if (labelMap.has(pre)) return;
 
   const lang = detectLanguage(pre);
   if (!lang) return;
 
-  const displayName = LANGUAGE_ALIASES[lang] ?? lang;
+  if (siteHasLanguageLabel(pre)) return;
 
-  pre.style.position = 'relative';
+  const displayName = LANGUAGE_ALIASES[lang] ?? lang;
+  const container = getCodeBlockContainer(pre);
+  container.style.position = 'relative';
 
   const label = document.createElement('span');
   label.className = LABEL_CLASS;
@@ -40,10 +54,10 @@ function injectLabel(pre: HTMLElement): void {
     position: 'absolute',
     top: '6px',
     left: '10px',
-    fontSize: '11px',
+    fontSize: '10px',
     fontFamily: 'system-ui, sans-serif',
     fontWeight: '600',
-    color: 'rgba(128,128,128,0.7)',
+    color: 'rgba(128,128,128,0.6)',
     textTransform: 'uppercase',
     letterSpacing: '0.5px',
     pointerEvents: 'none',
@@ -51,7 +65,7 @@ function injectLabel(pre: HTMLElement): void {
     zIndex: '5',
   });
 
-  pre.appendChild(label);
+  container.appendChild(label);
   labelMap.set(pre, label);
 }
 

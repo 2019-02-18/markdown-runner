@@ -66,3 +66,13 @@ let blockCounter = 0;
 export function generateBlockId(): string {
   return `mr-block-${++blockCounter}`;
 }
+
+/**
+ * Get the outermost container for a code block.
+ * On GitHub: the .highlight div wrapping the pre.
+ * On other sites: the pre itself.
+ */
+export function getCodeBlockContainer(pre: HTMLElement): HTMLElement {
+  const highlight = pre.closest('.highlight') as HTMLElement | null;
+  return highlight ?? pre;
+}
